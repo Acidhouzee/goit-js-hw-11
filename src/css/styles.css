@@ -1,0 +1,124 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fafafa;
+  color: #212121;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  background-color: #92c9d0;
+}
+
+main {
+  padding-bottom: 30px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+.search-form {
+  width: 100%;
+  padding: 20px;
+  background: rgb(0,59,70);
+  background: linear-gradient(150deg, rgba(0,59,70,1) 10%, rgba(7,87,91,1) 40%, rgba(102,165,173,1) 75%);
+  text-align: center;
+}
+
+.search-form input[name="searchQuery"] {
+  width: 300px;
+  padding: 10px;
+  font-size: 14px;
+  color: #003B46;
+  background-color: #c4dfe6;
+  border: 2px solid #66a5ad;
+  border-radius: 5px;
+  transition: 0.3s all;
+}
+
+.search-form input[name="searchQuery"]::placeholder {
+  color: #003B46;
+  font-size: 14px;
+}
+
+.search-form input[name="searchQuery"]:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.search-form button[type="submit"],
+.load-more {
+  padding: 12px 20px 10px;
+  font-size: 12px;
+  color: #C4DFE6;
+  background-color: #003B46;
+  border: 2px solid #003B46;
+  border-radius: 5px;
+  transition: 0.3s all;
+}
+
+.search-form button[type="submit"]:hover,
+.search-form button[type="submit"]:focus,
+.load-more:hover,
+.load-more:focus {
+  color: #003B46;
+  background-color: #C4DFE6;
+  border: 2px solid #C4DFE6;
+}
+
+.gallery {
+  max-width: 1740px;
+  padding: 70px 30px;
+  margin: 0 auto;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.gallery .photo-card {
+  flex-basis: calc((100% - 90px) / 4);
+}
+
+.gallery .photo-card {
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 50px rgba(0, 59, 70, 0.3);
+}
+
+.gallery .photo-card .card-image {
+  height: 250px;
+  object-fit: cover;
+}
+
+.gallery .photo-card .info {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.gallery .photo-card .info .info-item {
+  font-size: 18px;
+  flex-basis: calc((100% - 40px) / 4);
+  color: #003B46;
+}
+
+.load-more {
+  cursor: pointer;
+  margin: 0 auto;
+  padding: 15px 35px;
+  font-size: 16px;
+  display: none;
+}
+
+.load-more.is-active {
+  display: block;
+}
+
