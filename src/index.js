@@ -12,23 +12,10 @@ const searchInput = document.querySelector('[name="searchQuery"]');
 const gallery = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more')
 
-// settings for API
-// const safeSearch = true; // Default "false"
-// const orientation = 'horizontal'; // Accepted values: "all", "horizontal", "vertical"
-// const imageType = 'photo'; // Accepted values: "all", "photo", "illustration", "vector"
 const perPage = 40; // Accepted values: 3 - 200, Default: 20
 let page = 1 // Default: 1
 let formData = '';
 
-// function fetchImages(value) {
-//     return fetch(`${URL}?key=${API_KEY}&q=${value}&image_type=${imageType}&orientation=${orientation}&safesearch=${safeSearch}&page=${page}&per_page=${perPage}`)
-//     .then((res) => {
-//         if (!res.ok) {
-//             throw new Error(res.status);
-//         }
-//         return res.json();
-//     });
-// }
 async function fetchImages() {
     try {
         const {data} = await axios.get('https://pixabay.com/api/', {
