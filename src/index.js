@@ -12,9 +12,16 @@ const searchInput = document.querySelector('[name="searchQuery"]');
 const gallery = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more')
 
-const perPage = 40; // Accepted values: 3 - 200, Default: 20
+let perPage = 40;
 let page = 1 // Default: 1
 let formData = '';
+
+const lightbox = new SimpleLightbox('.gallery a', {
+    captions: true,
+    captionsData: 'alt',
+    captionPosition: 'bottom',
+    captionDelay: 250,
+});
 
 async function fetchImages() {
     try {
@@ -25,64 +32,59 @@ async function fetchImages() {
             safeSearch: true, // Default "false"
             orientation: 'horizontal', // Accepted values: "all", "horizontal", "vertical"
             imageType: 'photo', // Accepted values: "all", "photo", "illustration", "vector"
-            perPage: perPage,
+            per_page: perPage,
             page: page,
             }
         })
         return data;
     } catch (error) {
-        console.log(error);
+        Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
     }
 }
 
 function buildGallery(images) {
-    const img = images
-    .map((img) => {
+    return images
+    .map((images) => {
         return `<div class="photo-card">
-            <a class="gallery__link" href="${img.largeImageURL}"><img class="card-image" src="${img.webformatURL}" alt="${img.tags}" loading="lazy"></a>
+            <a class="gallery__link" href="${images.largeImageURL}"><img class="card-image" src="${images.webformatURL}" alt="${images.tags}" loading="lazy"></a>
             <div class="info">
                 <p class="info-item">
-                    Likes: <b>${img.likes}</b>
+                    Likes: <b>${images.likes}</b>
                 </p>
                 <p class="info-item">
-                    Views: <b>${img.views}</b>
+                    Views: <b>${images.views}</b>
                 </p>
                 <p class="info-item">
-                    Comments: <b>${img.comments}</b>
+                    Comments: <b>${images.comments}</b>
                 </p>
                 <p class="info-item">
-                    Downloads: <b>${img.downloads}</b>
+                    Downloads: <b>${images.downloads}</b>
                 </p>
             </div>
         </div>`;
     })
     .join("");
-    gallery.innerHTML = img;
-}
-
-function showGallery() {
-    var lightbox = new SimpleLightbox('.gallery a', {
-        captions: true,
-        captionsData: 'alt',
-        captionPosition: 'bottom',
-        captionDelay: 250,
-    });
+    gallery.innerHTML = images;
 }
 
 async function searchImage() {
     try {
         const result = await fetchImages();  
-        buildGallery(result.hits);
-        showGallery();
         if(result.total === 0) {
             loadMoreBtn.classList.remove('is-active');
             return Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');  
         }
         loadMoreBtn.classList.add('is-active');
-        if(result.totalHits - page * perPage < 0) {
+        if(result.totalHits - perPage * page < 0) {
             loadMoreBtn.classList.remove('is-active');
             return Notiflix.Notify.failure('We\'re sorry, but you\'ve reached the end of search results.');
         }
+        if(page === 1) {
+            lightbox.refresh();
+        }
+        const addingImages = buildGallery(result.hits);
+        gallery.insertAdjacentHTML('beforeend', addingImages); 
+        lightbox.refresh();   
     } catch (error) {
         console.log(error);
     } 
@@ -91,13 +93,17 @@ async function searchImage() {
 function inputSubmit(event) {
     event.preventDefault();
     page = 1;
+    gallery.innerHTML = '';
     formData = searchInput.value.trim();  
+    if(formData === '' || formData === ' ') {
+        return Notiflix.Notify.failure('Type something, please.');
+    }
     searchImage();
 }
 
-function loadImages() {
+async function loadImages() {
     page += 1;
-    searchImage();
+    await searchImage();
 }
 
 loadMoreBtn.addEventListener('click', loadImages);
